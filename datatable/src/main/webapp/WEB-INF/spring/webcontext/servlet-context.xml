@@ -24,6 +24,7 @@
 	
 	<!-- Enable scan for @Controller -->
 	<context:component-scan base-package="es.ucm.fdi.skeleton.web" />
+	<context:component-scan base-package="es.ucm.fdi.datatable.web" />
 
 	<!-- -->
 	<!-- Thymeleaf configuration -->

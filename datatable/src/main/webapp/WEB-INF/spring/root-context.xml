@@ -1,15 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
-	xmlns:context="http://www.springframework.org/schema/context" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:data="http://www.springframework.org/schema/data/jpa"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 			       http://www.springframework.org/schema/beans/spring-beans.xsd
 			       http://www.springframework.org/schema/context
 			       http://www.springframework.org/schema/context/spring-context.xsd
 			       http://www.springframework.org/schema/util
-			       http://www.springframework.org/schema/util/spring-util.xsd">
+			       http://www.springframework.org/schema/util/spring-util.xsd
+			       http://www.springframework.org/schema/tx
+			       http://www.springframework.org/schema/tx/spring-tx.xsd
+			       http://www.springframework.org/schema/data/jpa
+			       http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
 
-	<!-- Add <context:component-scan base-package="...." /> tags to search for classes (e.g. services, repositories)
-	 -->
+	<!-- Add <context:component-scan base-package="...." /> tags to search for 
+		classes (e.g. services, repositories) -->
+
+	<context:component-scan base-package="es.ucm.fdi.datatable.business.boundary" />
+
+	<!-- -->
+	<!-- Hibernate + JPA -->
+	<!-- -->
+	<bean id="dataSource"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/test" />
+		<property name="username" value="root" />
+		<property name="password" value="" />
+		<property name="connectionProperties">
+			<props>
+				<prop key="useUnicode">yes</prop>
+				<prop key="characterEncoding">UTF-8</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="emf"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="packagesToScan">
+			<array>
+				<value>es.ucm.fdi.datatable.business.entity</value>
+			</array>
+		</property>
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
+				<prop key="hibernate.hbm2ddl.import_files_sql_extractor">com.pragmasphere.hibernate.CustomSqlExtractor</prop>
+				<prop key="hibernate.hbm2ddl.import_files">/init-data.sql</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="emf" />
+	</bean>
+
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- -->
+	<!-- Spring Data JPA -->
+	<!-- -->
+
+	<data:repositories base-package="es.ucm.fdi.datatable.business.control"
+		entity-manager-factory-ref="emf" transaction-manager-ref="transactionManager" />
 
 </beans>
