@@ -23,11 +23,11 @@
 		<form action="#" th:action="@{/files}" th:object="${command}"
 			method="POST" enctype="multipart/form-data">
 			<div class="form-group"
-				th:classappend="${#fields.hasErrors('name')} ? has-error">
-				<label>Name: <input type="text" class="form-control"
-					placeholder="name" th:field="*{name}" /></label>
+				th:classappend="${#fields.hasErrors('description')} ? has-error">
+				<label>Description: <textarea class="form-control"
+					placeholder="Description" th:field="*{description}"></textarea></label>
 				<span class="help-block"
-					th:errors="*{name}">[errors]</span>
+					th:errors="*{description}">[errors]</span>
 			</div>
 			<div class="form-group"
 				th:classappend="${#fields.hasErrors('attachment')} ? has-error">
@@ -42,8 +42,8 @@
 
 		<h1>File list</h1>
 		<ul class="list-unstyled" th:each="file : ${files}">
-			<li><a href="#" th:href="@{/storage/__${file.fileName}__}"
-				th:text="${file.fileName}">File.</a></li>
+			<li><a href="#" th:href="${file.attachmentUrl}"
+				th:text="${file.description}">File</a></li>
 		</ul>
 		<footer>
 			<p>© FDI 2016</p>

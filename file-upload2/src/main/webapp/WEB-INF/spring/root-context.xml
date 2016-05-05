@@ -80,5 +80,8 @@
 
 	<data:repositories base-package="es.ucm.fdi.storage.business.control"
 		entity-manager-factory-ref="emf" transaction-manager-ref="transactionManager" />
+		
+	<data:repositories base-package="es.ucm.fdi.fileupload.business.control"
+		entity-manager-factory-ref="emf" transaction-manager-ref="transactionManager" />
 
 </beans>
