@@ -2,28 +2,33 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:util="http://www.springframework.org/schema/util"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
 			       http://www.springframework.org/schema/beans/spring-beans.xsd
 			       http://www.springframework.org/schema/context
 			       http://www.springframework.org/schema/context/spring-context.xsd
 			       http://www.springframework.org/schema/mvc
-			       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+			       http://www.springframework.org/schema/mvc/spring-mvc.xsd
+			       http://www.springframework.org/schema/util
+			       http://www.springframework.org/schema/util/spring-util.xsd">
 
 	<!-- -->
 	<!-- WebJars configuration -->
 	<!-- -->
-	
+
 	<!-- WebJars mapping mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/ -->
 	<mvc:resources mapping="/webjars/**" location="/webjars/" />
 
 	<!-- Mapping for static web resources -->
 	<mvc:resources location="/static/" mapping="/static/**" />
+	<mvc:resources location="/storage/" mapping="/storage/**" />
 
 	<!-- Define Spring MVC configuration using java annotations -->
 	<mvc:annotation-driven />
 	
 	<!-- Enable scan for @Controller -->
 	<context:component-scan base-package="es.ucm.fdi.skeleton.web" />
+	<context:component-scan base-package="es.ucm.fdi.fileupload.web" />
 
 	<!-- -->
 	<!-- Thymeleaf configuration -->
@@ -56,5 +61,11 @@
 		<property name="characterEncoding" value="UTF-8" />
 		<property name="cacheTTLMs" value="1000" />
 	</bean>
+
+	<!-- -->
+	<!-- Servlet >= 3.0 file upload configuration -->
+	<!-- -->
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
 
 </beans>

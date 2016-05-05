@@ -56,7 +56,20 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring/root-context.xml</param-value>
 	</context-param>
-
+	
+	<!-- -->
+	<!-- Required to enable method="PUT" in forms with 'multipart/form-data' -->
+	<!-- also using org.springframework.web.filter.HiddenHttpMethodFilter -->
+	<!-- -->
+	<filter>
+		<filter-name>MultipartFilter</filter-name>
+		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>MultipartFilter</filter-name>
+		<servlet-name>Dispatcher</servlet-name>
+	</filter-mapping>
+	
 	<!-- -->
 	<!-- Force UTF-8 encoding -->
 	<!-- -->

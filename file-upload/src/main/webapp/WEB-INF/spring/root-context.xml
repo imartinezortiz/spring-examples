@@ -11,5 +11,10 @@
 
 	<!-- Add <context:component-scan base-package="...." /> tags to search for classes (e.g. services, repositories)
 	 -->
+	<context:component-scan base-package="es.ucm.fdi.fileupload.business.boundary" />
+
+	<util:properties id="storagePrefs">
+		<prop key="rootPath">storage</prop>
+	</util:properties>
 
 </beans>
