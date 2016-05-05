@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee 
+		 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+         version="3.1">
+
+	<display-name>Spring MVC File upload 2 application</display-name>
+
+	<!-- -->
+	<!-- Force sessions to use cookies -->
+	<!-- -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+		<tracking-mode>COOKIE</tracking-mode>
+	</session-config>
+
+	<!-- -->
+	<!-- Log4J 2 initialization -->
+	<!-- -->
+
+	<!-- Disable automatic Servlet 3.0 initializacion (ServletContainerInitializer) 
+		to avoid bugs in Tomcat behavior -->
+	<context-param>
+		<param-name>isLog4jAutoInitializationDisabled</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<!-- Log4j 2 Servlet 2.5 (manual) initialization -->
+	<listener>
+		<listener-class>org.apache.logging.log4j.web.Log4jServletContextListener
+		</listener-class>
+	</listener>
+	<filter>
+		<filter-name>Log4jServletFilter</filter-name>
+		<filter-class>org.apache.logging.log4j.web.Log4jServletFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>Log4jServletFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>FORWARD</dispatcher>
+		<dispatcher>INCLUDE</dispatcher>
+		<dispatcher>ERROR</dispatcher>
+	</filter-mapping>
+
+	<!-- -->
+	<!-- Spring root context initialization -->
+	<!-- -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	
+	<!-- -->
+	<!-- Required to enable method="PUT" in forms with 'multipart/form-data' -->
+	<!-- also using org.springframework.web.filter.HiddenHttpMethodFilter -->
+	<!-- -->
+	<filter>
+		<filter-name>MultipartFilter</filter-name>
+		<filter-class>org.springframework.web.multipart.support.MultipartFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>MultipartFilter</filter-name>
+		<servlet-name>Dispatcher</servlet-name>
+	</filter-mapping>
+	
+	<!-- -->
+	<!-- Force UTF-8 encoding -->
+	<!-- -->
+
+	<filter>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter
+		</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharacterEncodingFilter</filter-name>
+		<servlet-name>Dispatcher</servlet-name>
+	</filter-mapping>
+
+
+	<!-- -->
+	<!-- Enables the use of '_method' parameter in POST forms to allow the use 
+		of non-POST HTTP methods in HTML forms. -->
+	<!-- -->
+	<filter>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HiddenHttpMethodFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HiddenHttpMethodFilter</filter-name>
+		<servlet-name>Dispatcher</servlet-name>
+	</filter-mapping>
+
+	<!-- -->
+	<!-- Enables the use of PUT and PATCH HTTP methods in 'application/x-www-form-urlencoded' 
+		requests -->
+	<!-- -->
+	<filter>
+		<filter-name>HttpPutFormContentFilter</filter-name>
+		<filter-class>org.springframework.web.filter.HttpPutFormContentFilter
+		</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>HttpPutFormContentFilter</filter-name>
+		<servlet-name>Dispatcher</servlet-name>
+	</filter-mapping>
+
+	<!-- -->
+	<!-- Spring MVC Dispatcher Servlet configuration -->
+	<!-- -->
+	<servlet>
+		<servlet-name>Dispatcher</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet
+		</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/spring/webcontext/servlet-context.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+		<multipart-config>
+			<max-file-size>5242880</max-file-size><!--5MB -->
+			<max-request-size>20971520</max-request-size><!--20MB -->
+		</multipart-config>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Dispatcher</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+
+</web-app>

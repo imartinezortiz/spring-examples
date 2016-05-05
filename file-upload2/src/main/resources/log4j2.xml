@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+	<Appenders>
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<PatternLayout pattern="%d [%t] %-5p %c - %m%n" />
+		</Console>
+	</Appenders>
+	<Loggers>
+		<!-- -->
+		<!-- Spring Loggers -->
+		<!-- -->
+
+		<Logger name="org.springframework" level="info" />
+
+		<Logger name="org.springframework.security" level="info" />
+
+		<!-- -->
+		<!-- Thymeleaf Loggers -->
+		<!-- -->
+		<Logger name="org.thymeleaf" level="info" />
+		<Logger name="org.thymeleaf.TemplateEngine.CONFIG" level="info" />
+		<Logger name="org.thymeleaf.TemplateEngine.TIMER" level="info" />
+		<Logger name="org.thymeleaf.TemplateEngine.cache.TEMPLATE_CACHE" level="info" />
+		<Logger name="org.thymeleaf.TemplateEngine.cache.FRAGMENT_CACHE" level="info" />
+		<Logger name="org.thymeleaf.TemplateEngine.cache.FRAGMENT_CACHE" level="info" />
+		<Logger name="org.thymeleaf.TemplateEngine.cache.MESSAGE_CACHE"  level="info" />
+		<Logger name="org.thymeleaf.TemplateEngine.cache.EXPRESSION_CACHE" level="info" />
+
+		<Root level="info">
+			<AppenderRef ref="STDOUT" />
+		</Root>
+	</Loggers>
+</Configuration>
