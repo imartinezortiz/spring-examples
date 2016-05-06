@@ -25,7 +25,7 @@ public class FileUploadController {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/files")
-	public ModelAndView archivos() {
+	public ModelAndView files() {
 		ModelAndView view = new ModelAndView("files");
 		view.addObject("files", manager.getAttachments());
 		view.addObject("command", new NewFileCommand());
@@ -33,7 +33,7 @@ public class FileUploadController {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/files")
-	public ModelAndView nuevoArchivo(@ModelAttribute("command") @Validated NewFileCommand command,
+	public ModelAndView addAttachment(@ModelAttribute("command") @Validated NewFileCommand command,
 			BindingResult result) throws IOException {
 		
 
@@ -48,5 +48,7 @@ public class FileUploadController {
 
 		return new ModelAndView("redirect:/files");
 	}
+	
+	
 
 }
