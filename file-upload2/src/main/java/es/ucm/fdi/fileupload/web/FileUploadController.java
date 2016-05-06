@@ -44,7 +44,7 @@ public class FileUploadController {
 			return view;
 		}
 
-		manager.addFile(command);
+		manager.addAttachment(command);
 
 		return new ModelAndView("redirect:/files");
 	}

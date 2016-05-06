@@ -28,15 +28,15 @@ public class AttachmentManager {
 		this.bucket = bucket;
 	}
 
-	public Attachment addFile(NewFileCommand command) throws IOException {
+	public Attachment addAttachment(NewFileCommand command) throws IOException {
 
 		Attachment archivo = attachments.save(new Attachment(command.getDescription()));
 		
-		MultipartFile file = command.getAttachment();
-		if (file != null && !file.isEmpty()) {
+		MultipartFile attachment = command.getAttachment();
+		if (attachment != null && !attachment.isEmpty()) {
 			String key = getStorageKey(archivo.getId());
-			String mimeType = file.getContentType();
-			storageManager.putObject(bucket, key, mimeType, file.getInputStream());
+			String mimeType = attachment.getContentType();
+			storageManager.putObject(bucket, key, mimeType, attachment.getInputStream());
 			archivo.setAttachmentUrl(storageManager.getUrl(bucket, key));
 			attachments.save(archivo);
 		}
