@@ -3,6 +3,8 @@ package es.ucm.fdi.fileupload.business.boundary;
 import java.io.IOException;
 import java.util.Collection;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -11,10 +13,14 @@ import org.springframework.web.multipart.MultipartFile;
 import es.ucm.fdi.fileupload.business.control.AttachmentRepository;
 import es.ucm.fdi.fileupload.business.entity.Attachment;
 import es.ucm.fdi.storage.business.boundary.StorageManager;
+import es.ucm.fdi.storage.business.entity.StorageObjectId;
 
 @Service
+@Transactional
 public class AttachmentManager {
 
+	private static final String ATTACHMENT_PREFIX = "attachment/";
+	
 	private StorageManager storageManager;
 
 	private AttachmentRepository attachments;
@@ -30,25 +36,35 @@ public class AttachmentManager {
 
 	public Attachment addAttachment(NewFileCommand command) throws IOException {
 
-		Attachment archivo = attachments.save(new Attachment(command.getDescription()));
+		Attachment attachment = attachments.save(new Attachment(command.getDescription()));
 		
-		MultipartFile attachment = command.getAttachment();
-		if (attachment != null && !attachment.isEmpty()) {
-			String key = getStorageKey(archivo.getId());
-			String mimeType = attachment.getContentType();
-			storageManager.putObject(bucket, key, mimeType, attachment.getInputStream());
-			archivo.setAttachmentUrl(storageManager.getUrl(bucket, key));
-			attachments.save(archivo);
-		}
-		return archivo;
+		MultipartFile attachmentFile = command.getAttachment();
+		String key = getStorageKey(attachment.getId());
+		attachment.setStorageKey(key);
+		String mimeType = attachmentFile.getContentType();
+		storageManager.putObject(bucket, key, mimeType, attachmentFile.getInputStream());			
+		attachment.setAttachmentUrl(storageManager.getUrl(bucket, key));
+		attachments.save(attachment);
+		return attachment;
 	}
 	
 	private String getStorageKey(Long id) {
-		return "attachment/"+Long.toString(id);
+		return ATTACHMENT_PREFIX+Long.toString(id);
 	}
 
 	public Collection<Attachment> getAttachments() {
 		return attachments.findAll();
+	}
+
+	public void deleteAttachment(long id) {
+		Attachment attachment = attachments.findOne(id);
+		StorageObjectId storageId = new StorageObjectId(bucket, attachment.getStorageKey());
+		try {
+			storageManager.removeObject(storageId);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		attachments.delete(attachment);
 	}
 
 }

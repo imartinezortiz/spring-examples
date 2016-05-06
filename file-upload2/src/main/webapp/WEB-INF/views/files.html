@@ -42,8 +42,13 @@
 
 		<h1>File list</h1>
 		<ul class="list-unstyled" th:each="file : ${files}">
-			<li><a href="#" th:href="${file.attachmentUrl}"
-				th:text="${file.description}">File</a></li>
+			<li>
+				<form method="POST" action="#" th:action="@{/files/__${file.id}__}">
+					<input type="hidden" name="_method" value="DELETE" />
+					<a href="#" th:href="${file.attachmentUrl}" th:text="${file.description}">File</a>
+					<button>Delete</button>
+				</form>
+			</li>
 		</ul>
 		<footer>
 			<p>© FDI 2016</p>

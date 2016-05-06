@@ -17,6 +17,8 @@ public class Attachment {
 
 	private URL attachmentUrl;
 	
+	private String storageKey;
+	
 	Attachment ( ){
 		
 	}
@@ -43,6 +45,14 @@ public class Attachment {
 
 	public void setAttachmentUrl(URL attachmentUrl) {
 		this.attachmentUrl = attachmentUrl;
+	}
+
+	public String getStorageKey() {
+		return storageKey;
+	}
+
+	public void setStorageKey(String storageKey) {
+		this.storageKey = storageKey;
 	}
 
 }
